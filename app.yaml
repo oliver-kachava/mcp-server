@@ -1,0 +1,44 @@
+# Digital Ocean App Platform app spec for MCP Gateway.
+# Deploy via: doctl apps create --spec app.yaml
+# Or connect a GitHub repo in the DO dashboard and use this spec.
+name: mcp-gateway
+region: nyc
+services:
+  - name: web
+    github:
+      repo: YOUR_ORG/mcp-server
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    envs:
+      - key: PORT
+        value: "8080"
+        scope: RUN_TIME
+        type: general
+      # Optional: set API_KEY to require X-API-Key or Authorization: Bearer on all non-health requests
+      # - key: API_KEY
+      #   value: your-secret-key
+      #   scope: RUN_TIME
+      #   type: secret
+      # Shopify MCP (optional): pass through to shopify-mcp child
+      # - key: SHOPIFY_CLIENT_ID
+      #   scope: RUN_TIME
+      #   type: secret
+      # - key: SHOPIFY_CLIENT_SECRET
+      #   scope: RUN_TIME
+      #   type: secret
+      # - key: MYSHOPIFY_DOMAIN
+      #   value: your-store.myshopify.com
+      #   scope: RUN_TIME
+      #   type: general
+    health_check:
+      initial_delay_seconds: 30
+      period_seconds: 10
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 5
+      http_path: /health
+      port: 8080
