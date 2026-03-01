@@ -1,12 +1,12 @@
 # Digital Ocean App Platform app spec for MCP Gateway.
 # Deploy via: doctl apps create --spec app.yaml
 # Or connect a GitHub repo in the DO dashboard and use this spec.
-name: mcp-gateway
+name: mcp-server
 region: nyc
 services:
   - name: web
     github:
-      repo: YOUR_ORG/mcp-server
+      repo: oliver-kachava/mcp-server
       branch: main
       deploy_on_push: true
     dockerfile_path: Dockerfile
